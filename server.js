@@ -14,29 +14,32 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// API Routes
+// -------------------- API Routes --------------------
 app.use("/api/admin", adminRoutes);
 app.use("/api/tests", testRoutes);
 
-// Root API route
-app.get("/api", (req, res) => res.send("API is running..."));
+// Root API check
+app.get("/api", (req, res) => {
+  res.send("Server is running");
+});
 
-// Handle unknown API routes (fixed: no *, just a function)
+// Unknown API routes
 app.use("/api", (req, res) => {
   res.status(404).json({ message: "API route not found" });
 });
 
-// Serve frontend build safely
+// -------------------- Frontend --------------------
 const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, "dist")));
+app.use(express.static(path.join(__dirname, "dist"))); // serve frontend build
 
-// Catch-all for frontend (only if frontend exists)
-app.get((req, res) => {
+// Catch-all frontend route (anything not starting with /api)
+app.get(/^(?!\/api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
-// DB connect and server start
+// -------------------- DB & Server --------------------
 const PORT = process.env.PORT || 5000;
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
@@ -44,4 +47,3 @@ mongoose
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch((err) => console.error("❌ MongoDB connection error:", err));
-
