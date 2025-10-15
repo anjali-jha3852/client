@@ -1,16 +1,17 @@
 import express from "express";
-import Test from "../models/Test.js";
+import multer from "multer";
+import { getTests, addTest, updateTest, deleteTest, bulkUpload } from "../controllers/testController.js";
+import { adminAuth } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
-// Public GET all tests (optional)
-router.get("/", async (req, res) => {
-  try {
-    const tests = await Test.find();
-    res.json(tests);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+// Routes
+router.get("/", getTests); // Public for users
+router.post("/", adminAuth, addTest);
+router.put("/:id", adminAuth, updateTest);
+router.delete("/:id", adminAuth, deleteTest);
+router.post("/bulk", adminAuth, upload.single("file"), bulkUpload);
 
 export default router;
+

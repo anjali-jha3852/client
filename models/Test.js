@@ -7,4 +7,5 @@ const testSchema = new mongoose.Schema({
   precautions: { type: String, default: "" },
 });
 
-export default mongoose.models.Test || mongoose.model("Test", testSchema);
+export default mongoose.model("Test", testSchema);
+
