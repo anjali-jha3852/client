@@ -12,11 +12,11 @@ const app = express();
 
 // -------------------- CORS --------------------
 app.use(cors({
-  origin: "https://client-ylky.onrender.com",
+  origin: "https://scan4health-test-1ipu32pao-anjali-jhas-projects-7f4e3b9e.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
 }));
+
 
 // -------------------- Body Parser --------------------
 app.use(express.json());
