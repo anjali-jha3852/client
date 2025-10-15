@@ -38,11 +38,17 @@ app.use(express.json());
 app.use("/api/admin", adminRoutes);
 app.use("/api/tests", testRoutes);
 
+// -------------------- Health Check / Test Route --------------------
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "Server is running!" });
+});
+
 // -------------------- Serve React frontend --------------------
 const __dirname = path.resolve();
 const frontendPath = path.join(__dirname, "../vite-project/dist");
 app.use(express.static(frontendPath));
 
+// Serve index.html for React Router routes
 app.get(/^\/(?!api|$).*/, (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
@@ -57,5 +63,6 @@ mongoose
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch((err) => console.error("❌ MongoDB connection error:", err));
+
 
 
