@@ -8,6 +8,8 @@ const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Routes
+router.get("/", getTests); // must exist
+
 router.post("/", verifyAdmin, addTest);
 router.put("/:id", verifyAdmin, updateTest);
 router.delete("/:id", verifyAdmin, deleteTest);
