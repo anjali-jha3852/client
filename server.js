@@ -33,7 +33,8 @@ app.use(express.json());
 
 // -------------------- API Routes --------------------
 app.use("/api/admin", adminRoutes);
-app.use("/api/tests", testRoutes);
+app.use("/api", testRoutes);
+
 
 // -------------------- Health Check --------------------
 app.get("/api/health", (req, res) => {
