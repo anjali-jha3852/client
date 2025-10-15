@@ -103,7 +103,7 @@ router.delete("/tests/:id", verifyAdmin, async (req, res) => {
 // -------------------- Multer Setup --------------------
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 100 * 1024 * 1024 }, // 100 MB max
+  limits: { fileSize: 100 * 1024 * 1024 }, // 
 });
 
 // -------------------- Bulk Upload --------------------

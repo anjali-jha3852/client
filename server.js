@@ -11,20 +11,27 @@ dotenv.config();
 const app = express();
 
 // -------------------- CORS --------------------
+
+
 const allowedOrigins = [
-  "https://scan4health-test-app.vercel.app", // your deployed frontend
-  "http://localhost:5173",                   // local dev
+  "http://localhost:5173",                  // local dev
+  "https://scan4health-test-app.vercel.app" // deployed frontend
 ];
+
 app.use(cors({
-  origin: function (origin, callback) {
+  origin: (origin, callback) => {
+    // allow requests with no origin (like Postman)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
+
+    if (!allowedOrigins.includes(origin)) {
+      console.log(`Blocked CORS request from ${origin}`); // optional debug
       return callback(new Error(`CORS not allowed for ${origin}`), false);
     }
+
     return callback(null, true);
   },
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type","Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
 
