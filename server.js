@@ -13,21 +13,21 @@ const app = express();
 
 // -------------------- CORS --------------------
 const allowedOrigins = [
-  "https://scan4health-test-app.vercel.app", // your deployed frontend
-  "http://localhost:5173", // local dev
+  "https://scan4health-test-app.vercel.app",
+  "http://localhost:5173",
 ];
 app.use(
   cors({
-    origin: function (origin, callback) {
+    origin: (origin, callback) => {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
+      if (!allowedOrigins.includes(origin)) {
         return callback(new Error(`CORS not allowed for ${origin}`), false);
       }
       return callback(null, true);
     },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
   })
 );
 
@@ -38,7 +38,7 @@ app.use(express.json());
 app.use("/api/admin", adminRoutes);
 app.use("/api/tests", testRoutes);
 
-// -------------------- Health Check / Test Route --------------------
+// -------------------- Health Check --------------------
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "Server is running!" });
 });
@@ -46,10 +46,11 @@ app.get("/api/health", (req, res) => {
 // -------------------- Serve React frontend --------------------
 const __dirname = path.resolve();
 const frontendPath = path.join(__dirname, "../vite-project/dist");
+
 app.use(express.static(frontendPath));
 
 // Serve index.html for React Router routes
-app.get(/^\/(?!api|$).*/, (req, res) => {
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
@@ -63,6 +64,7 @@ mongoose
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch((err) => console.error("❌ MongoDB connection error:", err));
+
 
 
 
