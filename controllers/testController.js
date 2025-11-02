@@ -11,6 +11,22 @@ export const getTests = async (req, res) => {
   }
 };
 
+// Search Tests (for user page — fast filtering)
+export const searchTests = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    const tests = await Test.find({
+      name: { $regex: q, $options: "i" } // case-insensitive search
+    });
+
+    res.json(tests);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
 // Add new test
 export const addTest = async (req, res) => {
   try {
@@ -60,6 +76,16 @@ export const bulkUpload = async (req, res) => {
 
     await Test.insertMany(testsToInsert);
     res.json({ message: `${testsToInsert.length} tests uploaded successfully` });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Delete all tests
+export const deleteAllTests = async (req, res) => {
+  try {
+    await Test.deleteMany({});
+    res.json({ message: "All tests deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
