@@ -81,13 +81,15 @@ export const bulkUpload = async (req, res) => {
   }
 };
 
-// Delete all tests
+//all delete
 export const deleteAllTests = async (req, res) => {
   try {
-    await Test.deleteMany({});
-    res.json({ message: "All tests deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    await Test.deleteMany({}); // delete all docs
+    res.status(200).json({ message: "✅ All tests deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting all tests:", error);
+    res.status(500).json({ message: "❌ Failed to delete tests", error });
   }
 };
+
 
